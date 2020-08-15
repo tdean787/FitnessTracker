@@ -1,0 +1,8 @@
+table th,
+table tr,
+table td {
+  padding: 5px; }
+table th {
+  border-bottom: 1px solid black; }
+
+/*# sourceMappingURL=output.css.map */
