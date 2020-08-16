@@ -31,6 +31,7 @@
             id="dateInput"
             aria-describedby="dateInfo"
             placeholder="Enter date"
+            required
           />
         </div>
         <div class="form-group">
@@ -41,6 +42,7 @@
             id="weightInput"
             aria-describedby="weightInfo"
             placeholder="Enter weight"
+            required
           />
         </div>
         <div class="form-group">
@@ -53,10 +55,12 @@
             placeholder="Enter height"
           />
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button id="retrieve-button" type="button" class="btn btn-warning">
-          Display Charts
-        </button>
+        <div class="justify-content-center form-buttons">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button id="retrieve-button" type="button" class="btn btn-warning">
+            Display Charts
+          </button>
+        </div>
       </form>
       <div id="table-container">
         <table id="table-display">

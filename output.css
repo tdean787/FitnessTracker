@@ -1,8 +1,35 @@
+table {
+  text-align: center;
+  border: 1px solid black;
+  margin: 10px 0;
+}
 table th,
 table tr,
 table td {
-  padding: 5px; }
+  padding: 5px 2px;
+}
+table tr {
+  padding-top: 5px;
+}
 table th {
-  border-bottom: 1px solid black; }
+  border-bottom: 1px solid black;
+  padding: 5px;
+  background-color: #f1f1f1;
+}
+table button {
+  margin: 5px 2px;
+}
+
+#table-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-buttons {
+  display: flex;
+}
+.form-buttons button {
+  margin: 5px;
+}
 
 /*# sourceMappingURL=output.css.map */

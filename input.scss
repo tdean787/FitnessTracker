@@ -2,9 +2,32 @@ table {
   th,
   tr,
   td {
-    padding: 5px;
+    padding: 5px 2px;
+  }
+  tr {
+    padding-top: 5px;
   }
   th {
     border-bottom: 1px solid black;
+    padding: 5px;
+    background-color: #f1f1f1;
+  }
+  button {
+    margin: 5px 2px;
+  }
+  text-align: center;
+  border: 1px solid black;
+  margin: 10px 0;
+}
+
+#table-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-buttons {
+  display: flex;
+  button {
+    margin: 5px;
   }
 }

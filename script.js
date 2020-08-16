@@ -5,12 +5,19 @@ const heightInput = document.querySelector("#heightInput");
 const dateInput = document.querySelector("#dateInput");
 const retrieveButton = document.querySelector("#retrieve-button");
 const signInButton = document.querySelector("#sign-in-button");
+const lineChartButton = document.querySelector("line-chart");
 const tableDisplay = document.querySelector("#table-display");
-let tableContainer = document.querySelector("#table-container");
-let deleteButtons;
-var ctx = document.querySelector("#myChart").getContext("2d");
+const tableContainer = document.querySelector("#table-container");
 
-const submitMeasurements = function (event) {
+//Initailize variables for chart data and modifications
+let deleteButtons;
+let minKey;
+let maxKey;
+let dataArray = [];
+let labelArray = [];
+var ctx = document.querySelector("#myChart");
+
+function submitMeasurements(event) {
   const metrics = {
     date: dateInput.value,
     height: heightInput.value,
@@ -19,7 +26,7 @@ const submitMeasurements = function (event) {
   localStorage.setItem(metrics.date, metrics.weight);
   event.preventDefault();
   clearInputs();
-};
+}
 
 function clearInputs() {
   weightInput.value = "";
@@ -27,14 +34,26 @@ function clearInputs() {
   dateInput.value = "";
 }
 
+function deleteCheck(e) {
+  let item = e.target;
+  if (item.className == "delete") {
+    console.log("yes");
+    localStorage.removeItem(item.id);
+    displayTable();
+  }
+}
+
 function displayTable() {
   let dateHeader = document.createElement("th");
   let weightHeader = document.createElement("th");
+  let deletetHeader = document.createElement("th");
   dateHeader.innerText = "Date";
   weightHeader.innerText = "Weight";
+  deletetHeader.innerText = "Delete?";
   tableDisplay.innerHTML = "";
   tableDisplay.appendChild(dateHeader);
   tableDisplay.appendChild(weightHeader);
+  tableDisplay.appendChild(deletetHeader);
 
   //create table
   for (const [key, value] of Object.entries(localStorage)) {
@@ -48,7 +67,7 @@ function displayTable() {
     date.innerText = key;
     weight.innerText = parseFloat(value);
     deleteButton.innerText = "X";
-    deleteButton.classList = `delete`;
+    deleteButton.classList = `delete btn-danger`;
     deleteButton.id = key;
 
     row.appendChild(date);
@@ -59,14 +78,11 @@ function displayTable() {
   }
 }
 
-function displayChart() {
-  let dataArray = [];
-  let labelArray = [];
-  let minKey;
-  let maxKey;
+function createChartData() {
   let arr = [];
-
-  //Create datasets for chart render
+  //Reset Charts data arrays to handle repeated clicks in same chart display session
+  dataArray = [];
+  labelArray = [];
   for (const [key, value] of Object.entries(localStorage)) {
     dataArray.push(value);
     labelArray.push(key);
@@ -76,10 +92,15 @@ function displayChart() {
     arr.push(Number(value));
   }
 
+  //Create datasets for chart render
   minKey = Math.min(...arr);
   maxKey = Math.max(...arr);
+  return { dataArray, labelArray, minKey, maxKey };
+}
 
+function displayChart() {
   //set chart axis to min and max values of dataset
+  createChartData();
   Chart.scaleService.updateScaleDefaults("linear", {
     ticks: {
       min: minKey - 10,
@@ -87,6 +108,7 @@ function displayChart() {
     },
   });
 
+  //Build Charts JS object
   var myChart = new Chart(ctx, {
     type: "bar",
     options: {
@@ -107,32 +129,7 @@ function displayChart() {
 }
 
 //Listeners
-
 retrieveButton.addEventListener("click", displayTable);
 retrieveButton.addEventListener("click", displayChart);
 tableContainer.addEventListener("click", deleteCheck);
 form.addEventListener("submit", submitMeasurements);
-
-function deleteCheck(e) {
-  let item = e.target;
-  if (item.className == "delete") {
-    console.log("yes");
-    localStorage.removeItem(item.id);
-    displayTable();
-  }
-}
-// deleteButtons.forEach((button) =>
-//   button.addEventListener("click", console.log(button))
-// );
-
-//TODO: Figure out how to sort the date keys
-// function sortKeys() {
-//   let ordered = {};
-//   console.log(localStorage);
-//   Object.keys(localStorage)
-//     .sort()
-//     .forEach(function (key) {
-//       ordered[new Date(key)] = localStorage[new Date(key)];
-//     });
-//   console.log(localStorage);
-// }
