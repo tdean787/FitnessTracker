@@ -15,6 +15,7 @@ let minKey;
 let maxKey;
 let dataArray = [];
 let labelArray = [];
+let orderedDates = {};
 var ctx = document.querySelector("#myChart");
 
 function submitMeasurements(event) {
@@ -35,12 +36,30 @@ function clearInputs() {
 }
 
 function deleteCheck(e) {
+  sortStorage();
   let item = e.target;
-  if (item.className == "delete") {
+  if (item.className == "delete btn-danger") {
     console.log("yes");
     localStorage.removeItem(item.id);
+    delete orderedDates[item.id];
     displayTable();
+    displayChart();
   }
+}
+
+function sortStorage() {
+  Object.keys(localStorage)
+    .sort(function (a, b) {
+      return a
+        .split("/")
+        .reverse()
+        .join("")
+        .localeCompare(b.split("/").reverse().join(""));
+    })
+    .forEach(function (key) {
+      orderedDates[key] = localStorage[key];
+    });
+  return { orderedDates };
 }
 
 function displayTable() {
@@ -79,16 +98,17 @@ function displayTable() {
 }
 
 function createChartData() {
+  sortStorage();
   let arr = [];
   //Reset Charts data arrays to handle repeated clicks in same chart display session
   dataArray = [];
   labelArray = [];
-  for (const [key, value] of Object.entries(localStorage)) {
+  for (const [key, value] of Object.entries(orderedDates)) {
     dataArray.push(value);
     labelArray.push(key);
   }
 
-  for (const [key, value] of Object.entries(localStorage)) {
+  for (const [key, value] of Object.entries(orderedDates)) {
     arr.push(Number(value));
   }
 
